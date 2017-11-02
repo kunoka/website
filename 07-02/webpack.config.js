@@ -6,11 +6,11 @@ var HtmlwebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   context: __dirname + "/src",
-  entry: './js/index.js',
+  entry: './js/root.js',
   //添加我们的插件会自动生成一个html文件
   plugins: [
     new HtmlwebpackPlugin({
-      template: __dirname + "/src/index.html"//html模版地址
+      template: __dirname + "/index.html"//html模版地址
     }),
     new webpack.LoaderOptionsPlugin({
       options: {
