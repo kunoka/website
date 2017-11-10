@@ -1,19 +1,67 @@
 import React from 'react'
 import {Row, Col} from 'antd'
-import {Menu, Icon} from 'antd'
+import {Menu, Icon, Tabs, message, Form, Input, Button, Checkbox, Modal} from 'antd'
 
+const FormItem = Form.Item
 const SubMenu = Menu.SubMenu
+const TabPane = Tabs.TabPane
 const MenuItemGroup = Menu.ItemGroup
 
-export default class PCHeader extends React.Component {
+class PCHeader extends React.Component {
   constructor() {
     super();
     this.state = {
-      current: 'top'
+      current: 'top',
+      modalVisible: false,
+      action: 'login',
+      hasLogined: false,
+      userNickName: '',
+      userId: 0
     }
   }
 
+  setModalVisible(value) {
+    this.setState({modalVisible: value})
+  }
+
+  handleClick(e) {
+    if (e.key = "register") {
+      this.setState({current: 'register'})
+      this.setModalVisible(true)
+    }
+    else {
+      this.setState({current: e.key})
+    }
+  }
+
+  handleSubmit(e){
+    // 页面开始向 API 进行提交数据
+    e.preventDefault() //阻止事件冒泡
+    var myFetchOptions = {
+      method: 'GET'
+    }
+    var formData = this.props.form.getFieldsValue()
+    console.log(formData)
+    var uri = 'http://newsapi.gugujiankong.com/Handler.ashx?action=register&username=userName&password=password&r_userName='+formData.r_userName+'&r_password='+formData.r_password+'&r_confirmPassword='+formData.r_confirmPassword
+    fetch(uri, myFetchOptions).then(response=>response.json()).then(json=>{
+      this.setState({userNickName: json.NickUserName, userId: json.userId})
+    })
+    message.success("请求成功！")
+    this.setModalVisible(false)
+  }
+
   render() {
+    let {getFieldDecorator} = this.props.form
+    const userShow = this.state.hasLogined ?
+      <Menu.Item key='logout' className='register'>
+        <Button type='primary' htmlType="button">{this.state.userNickName}</Button>&nbsp;&nbsp;<Link target='_blank'>
+        <Button type='dashed' htmlType="button">个人中心</Button></Link>
+        &nbsp;&nbsp;
+        <Button type='ghost' htmlType="button">退出</Button>
+      </Menu.Item> :
+      <Menu.Item key="register" className='register'>
+        <Icon type='appstore'/>注册/登录
+      </Menu.Item>
     return (
       <header>
         <Row>
@@ -26,7 +74,7 @@ export default class PCHeader extends React.Component {
             </a>
           </Col>
           <Col span={16}>
-            <Menu mode="horizontal" selectedKeys={[this.state.current]}>
+            <Menu mode="horizontal" onClick={this.handleClick.bind(this)} selectedKeys={[this.state.current]}>
               <Menu.Item key="top">
                 <Icon type="appstore"/>头条
               </Menu.Item>
@@ -51,7 +99,30 @@ export default class PCHeader extends React.Component {
               <Menu.Item key="shisang">
                 <Icon type="appstore"/>时尚
               </Menu.Item>
+              {userShow}
             </Menu>
+
+            <Modal title='用户中心' wrapClassName='vertical-center-modal' visible={this.state.modalVisible}
+                   onCancel={() => this.setModalVisible(false)}
+                   onOk={() => this.setModalVisible(false)} okText="关闭">
+              <Tabs type="card">
+                <TabPane tab='注册' key='2'>
+                  <Form layout="horizontal" onSubmit={this.handleSubmit.bind(this)}>
+                    <FormItem label="账户">
+                      <Input placeholder='请输入您的账号' {...getFieldDecorator('r_userName')} />
+                    </FormItem>
+                    <FormItem label="密码">
+                      <Input type="password" placeholder='请输入您的密码' {...getFieldDecorator('r_password')} />
+                    </FormItem>
+                    <FormItem label="确认密码">
+                      <Input type="password" placeholder='请再次输入您的密码' {...getFieldDecorator('r_confirmPassword')} />
+                    </FormItem>
+                    <Button type="primary" htmlType='submit'>注册</Button>
+                  </Form>
+                </TabPane>
+              </Tabs>
+            </Modal>
+
           </Col>
           <Col span={2}>
           </Col>
@@ -60,3 +131,5 @@ export default class PCHeader extends React.Component {
     )
   }
 }
+
+export default PCHeader = Form.create({})(PCHeader)
