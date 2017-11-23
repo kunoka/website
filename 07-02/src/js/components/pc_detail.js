@@ -1,6 +1,7 @@
 import React from 'react'
 import {Row, Col} from 'antd'
-
+import PCHeader from './pc_header'
+import PCFooter from './pc_footer'
 export default class PCNewsDetails extends React.Component {
   constructor() {
     super()
@@ -28,16 +29,17 @@ export default class PCNewsDetails extends React.Component {
   render() {
     return (
       <div>
+        <PCHeader></PCHeader>
         <Row>
           <Col span={2}></Col>
           <Col span={14} className="container">
             <div className='articleContainer' dangerouslySetInnerHTML={this.createMarkup()}>
-
             </div>
           </Col>
           <Col span={6}></Col>
           <Col span={2}></Col>
         </Row>
+        <PCFooter></PCFooter>
       </div>
     )
   }
