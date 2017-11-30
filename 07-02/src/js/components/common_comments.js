@@ -20,15 +20,21 @@ class CommonComments extends React.Component {
     let myFetchOptions = {
       "method": 'GET'
     }
-    let uri = "http://newsapi.gugujiankong.com/Handler.ashx?action=getcomments&uniquekey=" + this.props.params.uniquekey
+    let uri = "http://newsapi.gugujiankong.com/Handler.ashx?action=getcomments&uniquekey=" + this.props.uniquekey
     fetch(uri, myFetchOptions).then(response => response.json()).then(json => this.setState({'comments': json}))
   }
   handleSubmit (){
-
+    e.preventDefault()
+    let myFetchOptions = {
+      "method": 'GET'
+    }
+    let uri = "http://newsapi.gugujiankong.com/Handler.ashx?action=comment&userid=999&uniquekey=" + this.props.uniquekey + "&comment=content"
+    fetch(uri, myFetchOptions).then(response => response.json()).then(json => {
+      this.componentDidMount
+    })
   }
   render(){
     let {getFieldProps} = this.props.form
-
     const {comments} = this.state
     const commentList = comments.length ?
       comments.map((comment, index) => {<card index={index} title ={comment.UserName} extra={<a href="#">发布于{comment.datetime}</a>}>

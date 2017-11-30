@@ -19,7 +19,6 @@ export default class Root extends React.Component {
             <Route path="/" component={PCIndex}></Route>
             <Route path="/details/:uniquekey" component={PCNewsDetails}></Route>
           </Router>
-          <PCIndex/>
         </MediaQuery>
         <MediaQuery query='(max-device-width: 1224px)'>
           <Router history={hashHistory}>
