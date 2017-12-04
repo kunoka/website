@@ -1,6 +1,6 @@
 import React from 'react'
 import {Row, Col} from 'antd'
-import {Menu, Icon, Tabs, message, Form, Input, Button, Checkbox, Modal, Card} from 'antd'
+import {Menu, Icon, Tabs, message, Form, Input, Button, Checkbox, Modal, Card, notification} from 'antd'
 
 const FormItem = Form.Item
 const SubMenu = Menu.SubMenu
@@ -41,6 +41,7 @@ class CommonComments extends React.Component {
   }
 
   addUserCollection() {
+    console.log('---addUserCollection---')
     let myFetchOption = {
       method: 'GET'
     }
@@ -49,7 +50,7 @@ class CommonComments extends React.Component {
       .then(response => response.json())
       .then(json => {
         // 收藏成功以后，进行全局提醒
-
+        notification.success({message: 'ReactNews提醒', description: '收藏此文章成功'})
       })
   }
 
@@ -74,7 +75,7 @@ class CommonComments extends React.Component {
               </FormItem>
               <Button type="primary" htmlType="submit">提交评论</Button>
               &nbsp;&nbsp;
-              <Button type='primary' htmlType='button' onClick={this.addUserCollection()}>收藏该文章</Button>
+              <Button type='primary' htmlType='button' onClick={this.addUserCollection.bind(this)}>收藏该文章</Button>
             </Form>
           </Col>
         </Row>
