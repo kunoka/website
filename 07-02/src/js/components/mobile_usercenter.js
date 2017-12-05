@@ -7,17 +7,16 @@ const SubMenu = Menu.SubMenu
 const TabPane = Tabs.TabPane
 const MenuItemGroup = Menu.ItemGroup
 import {Router, Route, Link, browseHistory} from 'react-router'
-import PCHeader from './pc_header'
-import PCFooter from './pc_footer'
+import MobileHeader from './mobile_header'
+import MobileFooter from './mobile_footer'
 
-export default class PCUserCenter extends React.Component {
+export default class MobileUserCenter extends React.Component {
   render() {
     return (
       <div>
-        <PCHeader/>
+        <MobileHeader/>
         <Row>
-          <Col span={2}></Col>
-          <Col span={20}>
+          <Col span={24}>
             <Tabs>
               <TabPane tab="我的收藏列表" key="1">
               </TabPane>
@@ -27,10 +26,8 @@ export default class PCUserCenter extends React.Component {
               </TabPane>
             </Tabs>
           </Col>
-          <Col span={2}></Col>
         </Row>
-
-        <PCFooter/>
+        <MobileFooter/>
       </div>
     )
   }

@@ -1,2 +1,19 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title><%= htmlWebpackPlugin.options.title %></title>
+    <script src="./src/bundle.js"></script>
+</head>
+<body>
+<% for(var k in htmlWebpackPlugin.files.chunks){ %>
+<% if (k !== 'c.css'){ %>
+<script type="text/javascript" src="<%= htmlWebpackPlugin.files.chunks[k].entry %>"></script>
+<% } else {%>
+<link rel="stylesheet" href="<%= htmlWebpackPlugin.files.chunks[k].entry %>">
+<% } %>
+<% } %>
+
 <div id="example"></div>
-<script src="./src/bundle.js"></script>
+</body>
+</html>
