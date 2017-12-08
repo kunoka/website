@@ -4,14 +4,15 @@
 var webpack = require('webpack')
 var path = require('path')
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-
+const CONSTANTS = require('./app/config/CONSTANT'); // 静态资源CDN
+const publicPath = CONSTANTS.publicPath;
+// console.log('CONSTANTS',CONSTANTS)
 module.exports = {
   // context: __dirname + "/src",
   entry: {
-    'main.js':'./src/js/index.js',
-    'a.js': './src/js/a.js',
-    'b.js': './src/js/b.js',
-    'c.css': './src/css/style.css'
+    'rongcloud/cs.min.js':'./app/public/rongcloud/cs.min.js',
+    'rongcloud/RongIMLib-cs.js': './app/public/rongcloud/RongIMLib-cs.js',
+    'rongcloud/cs.min.css': './app/public/rongcloud/cs.min.css'
   },
   module: {
     loaders: [{
@@ -25,16 +26,16 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: "js/[name]",
-    publicPath : 'http://kuma.com/'
+    filename: "[name]",
+    publicPath : publicPath
   },
   plugins: [
     new HtmlWebpackPlugin({
-      filename: 'main.html',
+      filename: 'index.html',
       template: 'index.html',
       title: '我是title-1',
-      inject: false,
-      chunks: ['main.js','a.js','b.js','c.css'],
+      inject: true,
+      chunks: ['rongcloud/cs.min.js','rongcloud/RongIMLib-cs.js', 'rongcloud/cs.min.css'],
     })
   ]
 }
