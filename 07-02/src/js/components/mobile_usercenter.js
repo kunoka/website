@@ -17,6 +17,7 @@ export default class MobileUserCenter extends React.Component {
     // 初始状态
     this.state = {
       usercollection: '',
+      usercomments: '',
       previewImage: '',
       previewVisible: false
     }
@@ -25,6 +26,7 @@ export default class MobileUserCenter extends React.Component {
     let myFetchOption = {
       method: 'GET'
     };
+    // 获取收藏列表
     let uri = 'http://newsapi.gugujiankong.com/Handler.ashx?action=getuc&userid=' + localStorage.userid
     console.log('uri', uri)
     fetch(uri, myFetchOption)
@@ -35,6 +37,17 @@ export default class MobileUserCenter extends React.Component {
           usercollection: json
         })
         console.log('usercollection', this.state.usercollection)
+      })
+    // 获取评论列表
+    let uri_comment = 'http://newsapi.gugujiankong.com/Handler.ashx?action=getusercomments&userid=' + localStorage.userid
+    console.log('uri', uri_comment)
+    fetch(uri_comment, myFetchOption)
+      .then(response => response.json())
+      .then(json => {
+        console.log('json-comment', json)
+        this.setState({
+          usercomments: json
+        })
       })
   }
 
@@ -71,6 +84,15 @@ export default class MobileUserCenter extends React.Component {
       ))
       :
       '您还没有收藏文章，请去收藏吧。';
+    const {usercomments} = this.state;
+    const usercommentsList = usercomments.length ?
+      usercomments.map((comment, index) => (
+        <Card key={index} title={`于 ${comment.datetime} 评论了文章 ${comment.uniquekey}`} extra={<a href={`/#/details/${comment.uniquekey}`}>查看</a>}>
+          <p>{comment.Comments}</p>
+        </Card>
+      ))
+      :
+      '您还没有评论文章，请去评论吧。';
     return (
       <div>
         <MobileHeader/>
@@ -85,6 +107,11 @@ export default class MobileUserCenter extends React.Component {
                 </Row>
               </TabPane>
               <TabPane tab="我的评论列表" key="2">
+                <Row>
+                  <Col span={24}>
+                    {usercommentsList}
+                  </Col>
+                </Row>
               </TabPane>
               <TabPane tab="头像设置" key="3">
               </TabPane>

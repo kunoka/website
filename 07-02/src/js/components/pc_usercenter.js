@@ -79,7 +79,6 @@ export default class PCUserCenter extends React.Component {
       }
     }
     const {usercollection} = this.state;
-    console.log('usercomments', this.state.usercomments)
 
     const usercollectionList = usercollection.length ?
       usercollection.map((uc, index) => (

@@ -91,9 +91,10 @@
 }
 
 .tabs_product {
-    width: 300px;
+    width: 180px;
     padding-left: 10px;
     float: left;
+    color: red;
 }
 
 .tabs_news li {
