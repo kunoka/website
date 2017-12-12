@@ -12,20 +12,23 @@ import PCFooter from './pc_footer'
 
 export default class PCUserCenter extends React.Component {
   // 构造
-    constructor(props) {
-      super(props);
-      // 初始状态
-      this.state = {
-        usercollection: '',
-        previewImage: '',
-        previewVisible: false
-      }
+  constructor(props) {
+    super(props);
+    // 初始状态
+    this.state = {
+      usercollection: '',
+      usercomments: '',
+      previewImage: '',
+      previewVisible: false
     }
+  }
 
   componentDidMount() {
     let myFetchOption = {
       method: 'GET'
     };
+
+    // 获取收藏列表
     let uri = 'http://newsapi.gugujiankong.com/Handler.ashx?action=getuc&userid=' + localStorage.userid
     console.log('uri', uri)
     fetch(uri, myFetchOption)
@@ -37,7 +40,20 @@ export default class PCUserCenter extends React.Component {
         })
         console.log('usercollection', this.state.usercollection)
       })
+
+    // 获取评论列表
+    let uri_comment = 'http://newsapi.gugujiankong.com/Handler.ashx?action=getusercomments&userid=' + localStorage.userid
+    console.log('uri', uri_comment)
+    fetch(uri_comment, myFetchOption)
+      .then(response => response.json())
+      .then(json => {
+        console.log('json-comment', json)
+        this.setState({
+          usercomments: json
+        })
+      })
   }
+
   render() {
     const props = {
       name: '',
@@ -62,17 +78,28 @@ export default class PCUserCenter extends React.Component {
         })
       }
     }
-    const {usercollection}  = this.state;
-    console.log('usercollection', usercollection)
+    const {usercollection} = this.state;
+    console.log('usercomments', this.state.usercomments)
+
     const usercollectionList = usercollection.length ?
       usercollection.map((uc, index) => (
-      <Card key={index} title={uc.uniquekey} extra={<a target="_blank" href={`/#/details/${uc.uniquekey}`}>查看</a>}>
-        <p>{uc.Title}</p>
-      </Card>
-    ))
-    :
+        <Card key={index} title={uc.uniquekey} extra={<a target="_blank" href={`/#/details/${uc.uniquekey}`}>查看</a>}>
+          <p>{uc.Title}</p>
+        </Card>
+      ))
+      :
       '您还没有收藏文章，请去收藏吧。';
-    console.log('usercollectionList',usercollectionList)
+
+    const {usercomments} = this.state;
+    const usercommentsList = usercomments.length ?
+      usercomments.map((comment, index) => (
+        <Card key={index} title={`于 ${comment.datetime} 评论了文章 ${comment.uniquekey}`} extra={<a target="_blank" href={`/#/details/${comment.uniquekey}`}>查看</a>}>
+          <p>{comment.Comments}</p>
+        </Card>
+      ))
+      :
+      '您还没有评论文章，请去评论吧。';
+    console.log('usercommentsList',usercommentsList)
     return (
       <div>
         <PCHeader/>
@@ -90,6 +117,13 @@ export default class PCUserCenter extends React.Component {
                 </div>
               </TabPane>
               <TabPane tab="我的评论列表" key="2">
+                <div className="comment">
+                  <Row>
+                    <Col span={24}>
+                      {usercommentsList}
+                    </Col>
+                  </Row>
+                </div>
               </TabPane>
               <TabPane tab="头像设置" key="3">
                 <div className="clearfix">
